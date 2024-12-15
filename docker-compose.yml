@@ -1,0 +1,39 @@
+services:
+  esx-server:
+    container_name: esx-server
+    build: .
+    ports:
+      - "30120:30120/tcp"
+      - "30120:30120/udp"
+      - "40120:40120/tcp"
+    volumes:
+      - "./ESX:/fivem/server/txData"
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    # command: bash /fivem/server/run.sh
+
+  qbcore-server:
+    container_name: qbcore-server
+    build: .
+    ports:
+      - "30121:30120/tcp"
+      - "30121:30120/udp"
+      - "40121:40120/tcp"
+    volumes:
+      - "./QBCore:/fivem/server/txData"
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    # command: bash /fivem/server/run.sh
+  
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
